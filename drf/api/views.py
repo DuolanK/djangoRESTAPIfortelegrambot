@@ -10,6 +10,7 @@ from rest_framework.authentication import TokenAuthentication
 from .serializers import MessageSerializer
 from .models import Message
 from rest_framework import generics
+import secrets
 
 class MessageAPIView(APIView):
     def get(self, request):
@@ -37,3 +38,11 @@ class MessageAPIUpdate(generics.RetrieveUpdateAPIView):
 class MessageAPIDestroy(generics.RetrieveDestroyAPIView):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
+
+def generate_token(request):
+
+    message = Message.objects.filter(user=request.user)
+    for i in message:
+        i.token = secrets.token_hex(16)
+        i.save()
+    return render(request, 'api/generate_token.html', {'message': message})

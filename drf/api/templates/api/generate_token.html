@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+        {% for message in message %}
+        <p>Ваш текущий токен:</p>
+            {{ message.token }}
+
+        {% endfor %}
+    <form action="." method="post" class="token-form">
+
+        {{ form }}
+        <p><input type="submit" value="Place token"></p>
+        {% csrf_token %}
+    </form>
+
+
+</body>
+</html>
