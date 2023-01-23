@@ -7,29 +7,24 @@ from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.authentication import TokenAuthentication
 
 
-from .serializers import MessageSerializer
+from .serializers import MessageSerializer, MessageSerializerRead
 from .models import Message
 from rest_framework import generics
 import secrets
 
-class MessageAPIView(APIView):
-    def get(self, request):
-        q = Message.objects.filter(user=request.user)
-        return Response({'posts': MessageSerializer(q, many=True).data})
-    def post(self, request):
-        serializer = MessageSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({'post': serializer.data})
-        else:
-            return Response.status_code(500)
 
-class MessageAPIList(generics.ListCreateAPIView):
+class MessageAPIView(generics.ListCreateAPIView):
     serializer_class = MessageSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
     def get(self, request):
         q = Message.objects.filter(user=request.user)
         return Response({'posts': MessageSerializer(q, many=True).data})
+
+
+class MessageAPIList(generics.ListCreateAPIView):
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializerRead
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
 class MessageAPIUpdate(generics.RetrieveUpdateAPIView):
     queryset = Message.objects.all()
