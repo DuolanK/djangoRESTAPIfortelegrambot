@@ -1,2 +1,2 @@
-# djangoRESTAPI with telegrambot
+# djangoRESTAPI with telegram bot
 Django RestAPI 
